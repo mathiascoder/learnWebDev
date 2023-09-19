@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="w3-theme-blue-grey.css">
+    <link rel="stylesheet" href="w3.css">
+    <title>User Sign In</title>
+</head>
+
+<body class="w3-theme-l4" style="align-items: center;">
+    <div class="w3-container w3-half w3-margin-top" style="margin-top: 30%; align-items: center;">
+        <br><br><br>
+        <div class="w3-bar w3-large w3-theme-d4">
+            <span class="w3-bar-item w3-center w3-italic">SIGN IN</span>
+        </div>
+        <form method="post" class="w3-container w3-card-4">
+            <label for="email" class="w3-text-blue">Email:</label><br>
+            <input type="text" id="email" class="w3-input w3-animate-input w3-border" style="width: 30%" name="email" required>
+
+            <br>
+            <label for="password" class="w3-text-blue">Password</label><br>
+            <input type="password" id="password" class="w3-input w3-animate-input w3-border" style="width: 30%" name="password" required>
+            <br><br>
+            <input type="button" value="Sign In" id="signin" class="w3-button w3-black w3-center"
+                style="width: 100%; align-items: center;">
+        </form>
+    </div>
+</body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyBP77Y9e0mlnSoz27j97u70mVs6-zZM8",
+    authDomain: "learnwebdev-ebd6f.firebaseapp.com",
+    databaseURL: "https://learnwebdev-ebd6f-default-rtdb.firebaseio.com",
+    projectId: "learnwebdev-ebd6f",
+    storageBucket: "learnwebdev-ebd6f.appspot.com",
+    messagingSenderId: "419249277897",
+    appId: "1:419249277897:web:ade94509f840dd69d37618",
+    measurementId: "G-78S5NZ715H"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    const signinButton = document.getElementById("signin");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    signinButton.addEventListener("click", () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                // Signed in successfully
+                alert("User signed in successfully");
+                window.location.assign("dashboard.html");
+                // You can add redirection or other actions here
+            })
+            .catch((error) => {
+                const errorMessage = error.message;
+                alert("User not found! created account");
+                window.location.assign("signUp.html");
+            });
+    });
+</script>
+
+</html>

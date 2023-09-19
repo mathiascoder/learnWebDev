@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<title>Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<style>
+    body, h1, h2, h3, h4, h5 {
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        font-size: 16px;
+    }
+
+    .w3-half img {
+        margin-bottom: -6px;
+        margin-top: 16px;
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    .w3-half img:hover {
+        opacity: 1;
+    }
+</style>
+<body>
+
+<!-- Check if the user is logged in -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyBP77Y9e0mlnSoz27j97u70mVs6-zZM8",
+    authDomain: "learnwebdev-ebd6f.firebaseapp.com",
+    databaseURL: "https://learnwebdev-ebd6f-default-rtdb.firebaseio.com",
+    projectId: "learnwebdev-ebd6f",
+    storageBucket: "learnwebdev-ebd6f.appspot.com",
+    messagingSenderId: "419249277897",
+    appId: "1:419249277897:web:ade94509f840dd69d37618",
+    measurementId: "G-78S5NZ715H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const database = getDatabase(app);
+
+    // Get the user's display name and update the page
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in.
+            const userRef = ref(database, `users/${user.uid}`);
+            get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    document.getElementById("username").textContent = "Hello, " + userData.username;
+                }
+            });
+            document.getElementById("logout").style.display = "block";
+        } else {
+            // User is signed out.
+            document.getElementById("username").textContent = "Hello, Guest";
+            document.getElementById("logout").style.display = "none";
+        }
+    });
+
+    // Function to log out the user
+    const logoutButton = document.getElementById("logout");
+    logoutButton.addEventListener("click", () => {
+        signOut(auth)
+            .then(() => {
+              window.location.assign("index.html");
+            })
+            .catch((error) => {
+                // An error happened.
+                console.error(error);
+            });
+    });
+</script>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar">
+    <br>
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft"
+        style="width:100%;font-size:22px">Close Menu</a>
+
+    <div class="w3-bar-block">
+        <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Home</a>
+        <a href="#showcase" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Showcase</a>
+        <a href="#services" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Services</a>
+        <a href="#designers" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Designers</a>
+        <a href="#packages" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Packages</a>
+        <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contact</a>
+    </div>
+    <!-- Add a logout button -->
+    <button id="logout" class="w3-button w3-red w3-hover-white" style="display: none;">Logout</button>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding">
+    <a href="javascript:void(0)" class="w3-button w3-white w3-margin-right" onclick="w3_open()">&#9776;</a>
+    <span class="w3-text-teal w3-padding-64 w3-margin-left"><b id="username">Hello, Guest</b></span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu"
+    id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+    <!-- Header -->
+    <div class="w3-container" style="margin-top:80px" id="showcase">
+        <h1 class="w3-jumbo w3-small  w3-text-teal"><b>iLearnWeb</b></h1>
+        <h4 class="w3-medium w3-text-red"><b>Fullfill your dream of becoming a web developer</b></h4>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+    </div>
+    <!-- Photo grid (modal) -->
+    <div class="w3-row-padding">
+        <div class="w3-half">
+            <img src="../w3images/kitchenconcrete.jpg" style="width:100%" onclick="onClick(this)"
+                alt="Concrete meets bricks">
+
+            <p><button onclick="document.getElementById('menu').style.display='block'"
+                    class="w3-button w3-black" style="width:100%; align-item:center;">menu</button></p>
+
+        </div>
+
+        <!-- End page content -->
+    </div>
+
+    <!-- Menu Modal -->
+    <div id="menu" class="w3-modal">
+        <div class="w3-modal-content w3-animate-zoom">
+            <div class="w3-container w3-black w3-display-container">
+                <span onclick="document.getElementById('menu').style.display='none'"
+                    class="w3-button w3-display-topright w3-large">x</span>
+                <h1>WITHOUT CODING</h1>
+            </div>
+            <div class="w3-container">
+                <h5>Get your app for <b>#10K</b></h5>
+                <button class="w3-button w3-blue  w3-center" style="width:100%; align-item:center;">GET APP </button>
+                <br>
+            </div>
+            <!-- 
+                <div class="w3-container w3-blue">
+              <h1>FOR CODING </h1>
+            </div>
+            <div class="w3-container">
+              <h5>Grilled Fish and Potatoes <b>$8.50</b></h5>
+              <h5>Italian Pizza <b>$5.50</b></h5>
+              <h5>Veggie Pasta <b>$4.00</b></h5>
+              <h5>Chicken and Potatoes <b>$6.50</b></h5>
+              <h5>Deluxe Burger <b>$5.00</b></h5>
+              --> 
+            </div>
+        </div>
+    </div>
+
+    <!-- W3.CSS Container -->
+    <div class="w3-black w3-container w3-padding-32" style="margin-top:75px;padding-right:58px"><p class="w3-right ">Powered by <a href="default.html" title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a></p></div>
+
+    <script>
+        // Script to open and close sidebar
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
+        }
+
+        // Modal Image Gallery
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+            var captionText = document.getElementById("caption");
+            captionText.innerHTML = element.alt;
+        }
+    </script>
+
+</body>
+</html>
